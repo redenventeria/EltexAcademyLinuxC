@@ -5,16 +5,19 @@
 
 #define INT_SIZE 32
 
+int is_non_zero(int a)
+{
+	return a != 0 ? 1 : 0;
+}
+
 char* get_base_2(unsigned int a)
 {
 
 	char *s = malloc(sizeof(char) * (INT_SIZE + 1));
 	
 	unsigned int count, i;
-        for(i = 1, count = 0; count < 32; i = (i << 1), count++) {
-		//printf("bit %u: %d\n", count, ((i & a) >> count)); // Более детальный вывод с нумерацией
-		printf("%u", ((i & a) >> count));
-		s[count] = ((i & a) >> count) + '0';
+        for(i = 1 << 31, count = 0; count < 32; i = (i >> 1), count++) {
+		s[count] = is_non_zero(i & a) + '0'; 
         }
 
 	s[count] = '\0';
@@ -26,12 +29,21 @@ char* get_base_2(unsigned int a)
 int main()
 {
 	unsigned int a;
-	printf("Enter a positive number: ");
+	printf("Enter positive  number: ");
 	scanf("%d", &a);
-	
+
 	char *s = get_base_2(a);
-	printf("%s\n", s);
+	printf("%d in binary: %s\n", a, s);
 	free(s);
-	printf("%d", s);
+
+
+	//Проверка для чисел от 1 до 32
+        /*	
+	for(unsigned int i = 1; i <= 32; i++) {
+		char *s = get_base_2(i);
+		printf("%d in binary: %s\n", i, s);
+		free(s);
+	}
 	return 0;
+	*/
 }
