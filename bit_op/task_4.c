@@ -7,7 +7,7 @@
 
 int merge_bytes(int a, int b)
 {
-	return (a & 0xFFFF00FF) | (b & 0x0000FF00);
+	return (a & 0xFFFF00FF) | ((unsigned char)b << 8);
 }
 
 int main()
@@ -22,7 +22,7 @@ int main()
 	printf("%x and %x merged in hex: %x\n", a, b, z);
 
 	a = 0xAABBCCDD;
-	b = 0x11223344;
+	b = 0x33;
 	z = merge_bytes(a, b);
 	printf("%d and %d merged: %d\n", a, b, z);
 	printf("%x and %x merged in hex: %x\n", a, b, z);
