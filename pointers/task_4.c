@@ -1,7 +1,7 @@
 #include<stdlib.h>
 #include<stdio.h>
 
-#define BUF_SIZE 100
+#define BUF_SIZE 101
 
 char *find(char *s1, char *s2)
 {
@@ -40,7 +40,7 @@ int main()
 	} while (sscanf(buf, "%50s %50s", s1, s2) != 2);
 	
 	char *ans = find(s1, s2);
-	printf("index of the first occurence is: %d", ans - s1);
+	printf("index of the first occurence is: %d\n", ans - s1);
 	
 	return 0;
 }
