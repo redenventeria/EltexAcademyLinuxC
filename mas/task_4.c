@@ -42,7 +42,7 @@ int main() {
 			num++;			
 		}
 
-		for(size_t i = n - ring - 1; i --> ring + 1;) { // index in range [n - ring - 2; ring]
+		for(size_t i = n - ring - 1; i --> ring + 1;) { // index in range [n - ring - 2; ring + 1]
 			m[i][ring] = num;
 			num++;
 		}
