@@ -5,6 +5,7 @@
 
 
 
+// set of prompt strings used for getting user input
 const char menu_prompt[] = "1) Добаить абонента\n2) Удалить абонента\n3) Поиск всех абонентов по имени\n4) Вывод всех записей\n5) Выход\nВведите команду: ";
 const char menu_failure[] = "Такой команды нет, попробуйте ещё раз";
 
@@ -23,16 +24,28 @@ const char confirm_prompt[] = "Подтвердить изменения(y/n)? "
 const char confirm_failure[] = "Такой опции нет, попробуйте ещё раз.";
 
 
-#define BUF_SIZE 20
 
+// Main struct and array.
 typedef struct {
 	char name[10];
 	char second_name[10];
 	char tel[10];
 } abonent;
 
+#define BUF_SIZE 20
+#define MAX_BOOK_SIZE 100
+abonent book[MAX_BOOK_SIZE];
+size_t count_ab = 0;
 
 
+
+/* 
+ * Function for processing user input.
+ * Safely reads input to buf, eats all excess characters until '\n' is found.
+ * Repeatedly tries to get correct input valiated by validator 
+ * function until getting correct string (accoring to validator function)
+ * Arguments prompt an promt_failure are used to give feeback.
+ */
 void get_val_input(char *buf, const char *prompt, const char *prompt_failure, int (*validator)(char*))
 {
 	do {
@@ -51,13 +64,8 @@ void get_val_input(char *buf, const char *prompt, const char *prompt_failure, in
 }
 
 
- 
-#define MAX_BOOK_SIZE 100
-abonent book[MAX_BOOK_SIZE];
-size_t count_ab = 0;
 
-
-
+// Validation functions.
 int is_command(char *buf)
 {
 	return strlen(buf) == 1 && '1' <= buf[0] && buf[0] <= '5';
@@ -84,6 +92,7 @@ int is_confirm(char *buf)
 
 
 
+// Function declarations.
 void add_abonent();
 void delete_abonent();
 void search_abonent();
@@ -92,6 +101,7 @@ void test_fill();
 
 
 
+// Main function.
 int main()
 {
 	//test_fill();
@@ -128,6 +138,7 @@ int main()
 
 
 
+// Provides interactive prompt to user insertion.
 void add_abonent()
 {
 	if(count_ab == MAX_BOOK_SIZE) {
@@ -156,14 +167,14 @@ void add_abonent()
 	return;
 }
 
+
+
+// Provides interactive prompt for user deletion.
 void delete_abonent()
 {
 	char name[BUF_SIZE]; get_val_input(name, name_prompt, name_failure, &is_name);
 	
 	for(size_t i = 0; i < count_ab; i++) {
-
-		//printf("%s %s %s %d\n", book[i].name, book[i].second_name, book[i].tel, i);
-		
 
 		if(!strcmp(name, book[i].name)) {
 			printf("Найден пользоатель с данными:\nИмя: %s Фамилия: %s Номер: %s\nУдалить?\n", book[i].name, book[i].second_name, book[i].tel);
@@ -179,6 +190,10 @@ void delete_abonent()
 
 }
 
+
+
+
+// Provides interactive prompt for user search.
 void search_abonent()
 {
 	char name[BUF_SIZE]; get_val_input(name, name_prompt, name_failure, &is_name);
@@ -188,6 +203,10 @@ void search_abonent()
 			printf("Найден пользоатель с данными:\nИмя: %s Фамилия: %s Номер: %s\n", book[i].name, book[i].second_name, book[i].tel);
 }
 
+
+
+
+// Prints entire user base.
 void print_all_abonents()
 {
 	for(size_t i = 0; i < count_ab; i++)
@@ -197,9 +216,12 @@ void print_all_abonents()
 
 }
 
+
+
+// Testing function, fills entire array with random entries.
 void test_fill()
 {
-	count_ab = 100;
+	count_ab = MAX_BOOK_SIZE;
 	for(size_t i = 0; i < count_ab; i++)
 	{
 		book[i].name[0] = 'a' + rand() % 26;
