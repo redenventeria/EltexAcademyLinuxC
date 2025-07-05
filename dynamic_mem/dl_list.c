@@ -5,11 +5,6 @@
 
 
 #include"dl_list.h"
-//#include"contact.h"
-
-
-
-typedef int (*comp)(void*, void*);
 
 
 
