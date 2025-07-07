@@ -1,0 +1,31 @@
+
+
+
+// set of prompt strings used for getting user input
+const char menu_prompt[] = "1) Добаить абонента\n2) Удалить абонента\n3) Поиск всех абонентов по имени\n4) Вывод всех записей\n5) Выход\nВведите команду: ";
+const char menu_failure[] = "Такой команды нет, попробуйте ещё раз";
+
+const char name_prompt[] = "Введите имя: ";
+const char name_failure[] = "Имя должно содержать не более 9 символов!";
+
+
+const char second_name_prompt[] = "Введите фамилию: ";
+const char second_name_failure[] = "Фамилия должна содержать не более 9 символов!";
+
+
+const char tel_prompt[] = "Введите номер: ";
+const char tel_failure[] = "Номер должен содержать не более 9 символов и состоять из цифр!";
+
+const char confirm_prompt[] = "Подтвердить изменения(y/n)? ";
+const char confirm_failure[] = "Такой опции нет, попробуйте ещё раз.";
+
+/*
+ * Function: pretty_fgets
+ * -----------------------
+ * Does the same as fgets, except:
+ *  - additionally discards any overflowing bytes untill newline symbol.
+ *
+ */
+void pretty_fgets(char *restrict buf, size_t n, FILE *restrict stream);
+
+
