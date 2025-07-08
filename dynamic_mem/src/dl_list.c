@@ -5,131 +5,125 @@
 
 
 
-#include"dl_list.h"
+#include"../include/dl_list.h"
 
 
 
-dl_list* new_list(void *elem, size_t elem_size)
+void new_list(dl_list *list)
 {
-	dl_list *list = (dl_list*)malloc(sizeof(dl_list));	
-		
-	if (list == NULL) {
-		perror("Out of memory!\n");
-		exit(errno);
-	}
-	
-	void *elem_copy = malloc(elem_size);
-	memcpy(elem_copy, elem, elem_size);
-	list->elem = elem_copy;
-
-	list->elem_size = elem_size;
-	list->prev = NULL;
-	list->next = NULL;
-	
-	return list;
+  list->head = NULL;
+  list->tail = NULL;
+  list->len = 0;
 }
 
 
 
 void add_tail(dl_list *list, void *elem, size_t elem_size)
 {
-	
-	if(list->next != NULL) {
-		add_tail(list->next, elem, elem_size);
-		return;
-	}
 
-	dl_list *new = (dl_list*)malloc(sizeof(dl_list));
+  // Allocating memory for new elem and node
+
+	dl_list_node *new = (dl_list_node*)malloc(sizeof(dl_list_node));
 	
-	if (list == NULL) {
+	if (new == NULL) {
 		perror("Out of memory!\n");
 		exit(errno);
 	}
-	
+
 	void *elem_copy = malloc(elem_size);
+
+	if (elem_copy == NULL) {
+		perror("Out of memory!\n");
+		exit(errno);
+	}
+
+  // Creating new node
+  
+  dl_list_node *tail_copy = list->tail;
+
 	memcpy(elem_copy, elem, elem_size);
 	new->elem = elem_copy;
-
 	new->elem_size = elem_size;
-	new->prev = list;
-	new->next = NULL;
-	
-	list->next = new;
-	
+  new->prev = list->tail;
+  new->next = NULL;
+
+  // Adding information about new node to list
+
+	if(list->head == NULL)
+    list->head = new;
+  if(list->tail != NULL)
+    list->tail->next = new;
+  list->tail = new;
+  list->len++;
+
 	return;
 }
 
 
 
-void delete_node(dl_list *list)
+void delete_node(dl_list *list, dl_list_node *node)
 {
+  // Updating list info
 
-	if(list->prev != NULL)
-		list->prev->next = list->next;
-	if(list->next != NULL)
-		list->next->prev = list->prev;
+  if(list->head == node)
+    list->head = node->next;
+  if(list->tail == node)
+    list->tail = node->prev;
+  list--;
 
-	free(list->elem);
+  // Modifying node neighbours so structure is preserved
 
-	list->elem = NULL;
-	list->prev = NULL;
-	list->next = NULL;
+	if(node->prev != NULL)
+		node->prev->next = node->next;
+	if(node->next != NULL)
+		node->next->prev = node->prev;
 
-	free(list);
-	list = NULL;
+
+	free(node->elem);
+	node->elem = NULL;
+	node->prev = NULL;
+	node->next = NULL;
+  free(node);
 }
 
 
 
-void find_all_nodes(dl_list **buf, size_t n, dl_list *list, void *value, comp eq)
+void find_all_nodes(dl_list_node **buf, size_t buf_len, dl_list *list, void *value, comp eq)
 {
-	size_t i = 0;
+	dl_list_node *node = list->head;
+  size_t i = 0;
 
-	dl_list *cur = list;
-	while(i < n - 1 && cur != NULL) {
-		if(eq(value, cur->elem)) {	
-			buf[i] = cur;
-			i++;
-		}
-		cur = cur->next;
-	}
-	
-	if(list != NULL)
-		cur = list->prev;
-	while(i < n - 1 && cur != NULL) {
-		if(eq(value, cur->elem)) {	
-			buf[i] = cur;
-			i++;
-		}
-		cur = cur->prev;
-	}
-	
-	buf[i] = NULL;
+  while(i < buf_len - 1 && node != NULL)
+  {
+    if(eq(value, node->elem)) {
+      buf[i] = node;
+      i++;
+    }
+    node = node->next;
+  
+  }
+
+  buf[i] = NULL;
+  
+
 }
 
 
 
 void free_list(dl_list *list)
 {
-	dl_list *cur_n = list;
-	dl_list *cur_p = NULL;
-	if(list != NULL)  
-		cur_p = list->prev;
+	dl_list_node *node = list->head;
 	
-	while(cur_n != NULL) {
-		dl_list *t = cur_n->next;
-		free(cur_n->elem);
-		free(cur_n);
-		cur_n = t;
-	}
-
-	while(cur_p != NULL) {
-		dl_list *t = cur_p->prev;
-		free(cur_p->elem);
-		free(cur_p);
-		cur_p = t;
-	}
-
+	while(node != NULL) {
+		dl_list_node *t = node->next;
+		free(node->elem);
+		free(node);
+		node = t;
+  }
+  
+  list->head = NULL;
+  list->tail = NULL;
+  list->len = 0;
 }
 
 
@@ -145,28 +139,28 @@ int int_eq(int *a, int *b)
 int main()
 {
 	int a = 12;
-	dl_list *l = new_list(&a, sizeof(a));
+	dl_list l; new_list(&l);
 	
 	int b = 15;
 	int c = 111;
 	int d = 98;
 	
-	add_tail(l, &b, sizeof(int));
-	add_tail(l, &c, sizeof(int));
-	add_tail(l, &d, sizeof(int));	
-	dl_list **buf = malloc(sizeof(dl_list*) * 10);
-	find_all_nodes(buf, 10, l, &c, (comp)int_eq);
+	add_tail(&l, &b, sizeof(int));
+	add_tail(&l, &c, sizeof(int));
+	add_tail(&l, &d, sizeof(int));
+	dl_list_node **buf = malloc(sizeof(dl_list_node*) * 10);
+	find_all_nodes(buf, 10, &l, &c, (comp)int_eq);
 	
 	size_t i = 0;
 	while(buf[i] != NULL)
 		i++;
 	printf("%d\n", *(int*)(buf[0]->elem));
-	delete_node(buf[0]);
+	delete_node(&l, buf[0]);
 
-	find_all_nodes(buf, 10, l, &b, (comp)int_eq);
+	find_all_nodes(buf, 10, &l, &b, (comp)int_eq);
 	
 	printf("%d\n", *(int*)(buf[0]->elem));
 	
 	free(buf);
-	free_list(l);	
+	free_list(&l);	
 }
