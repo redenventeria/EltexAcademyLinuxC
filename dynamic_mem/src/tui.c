@@ -1,5 +1,4 @@
-
-
+#include"../include/tui.h"
 
 // set of prompt strings used for getting user input
 const char menu_prompt[] = "1) Добаить абонента\n2) Удалить абонента\n3) Поиск всех абонентов по имени\n4) Вывод всех записей\n5) Выход\nВведите команду: ";
@@ -19,13 +18,27 @@ const char tel_failure[] = "Номер должен содержать не бо
 const char confirm_prompt[] = "Подтвердить изменения(y/n)? ";
 const char confirm_failure[] = "Такой опции нет, попробуйте ещё раз.";
 
-/*
- * Function: pretty_fgets
- * -----------------------
- * Does the same as fgets, except:
- *  - additionally discards any overflowing bytes untill newline symbol.
- *
- */
-void pretty_fgets(char *restrict buf, size_t n, FILE *restrict stream);
 
 
+void pretty_fgets(char *restrict buf, size_t n, FILE *restrict stream)
+{
+		fgets(buf, n, stream);
+
+		if(buf[strlen(buf) - 1] != '\n')
+			while(getchar() != '\n') {}
+
+		buf[strcspn(buf, "\n")] = '\0';
+}
+
+
+
+void get_val_input(char *restrict buf, size_t n, FILE *restrict stream, buf_validator *is_valid, const char *prompt, const char *failure)
+{
+  printf("%s", prompt);
+	do {
+		pretty_fgets(buf, n, stream);
+
+		if(!is_valid(buf))
+			printf("%s\n", failure);
+	} while(!is_valid(buf));
+}

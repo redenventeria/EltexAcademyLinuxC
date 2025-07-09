@@ -1,4 +1,7 @@
+#ifndef _INCLUDE_DL_LIST_H_
+#define _INCLUDE_DL_LIST_H_
 
+#include<stddef.h>
 
 struct dl_list_node {
 	struct dl_list_node *prev;
@@ -22,3 +25,5 @@ void add_tail(dl_list *list, void *elem, size_t elem_size);
 void delete_node(dl_list *list, dl_list_node *node);
 void find_all_nodes(dl_list_node **buf, size_t buf_len, dl_list *list, void* value, comp eq);
 void free_list(dl_list *list);
+
+#endif

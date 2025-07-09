@@ -1,42 +1,38 @@
 #include<stdio.h>
 #include<string.h>
 
+#include"../include/contact.h"
 
-#include"contact.h"
+void  new_contact(contact *buf, const char *name, const char *second_name, const char *tel) {
 
-
-
-void  new_contact(contact *buf, char *name, char *second_name, char *tel) {
-
-	strncpy(buf->name, name, LEN - 1);
-	buf->name[LEN - 1] = '\0';
-
+	strncpy(buf->name, name, LEN);
 	strncpy(buf->second_name, second_name, LEN - 1);
-	buf->second_name[LEN - 1] = '\0';
-
 	strncpy(buf->tel, tel, LEN - 1);
-	buf->tel[LEN - 1] = '\0';
 
 }
 
-void copy_contact(contact *to, contact *from)
+void str_contact(char *buf, contact *c)
 {
-	memcpy(to, from, sizeof(contact));	
+  
+	sprintf(buf, "name:%s sec_name:%s tel:%s\n", c->name, c->second_name, c->tel);
 }
 
-void print_contact(contact *c)
+int is_name(const char *buf)
 {
-	printf("name:%s sec_name:%s tel:%s\n", c->name, c->second_name, c->tel);
+  return 1 <= strlen(buf) && strlen(buf) <= 9;
 }
 
-int main()
+int is_tel(const char *buf)
 {
-	contact c;
-	new_contact(&c, "abc", "def", "0");
-	contact d;
-	copy_contact(&d, &c);
-	print_contact(&c);
-	print_contact(&d);
-	
-	return 0;
+  if(!(1 <= strlen(buf) && strlen(buf) <= 9))
+      return 0;
+  
+  while(*buf != '\0') {
+    if(!('0' <= *buf && *buf <= '9'))
+      return 0;
+    buf++;
+  }
+  return 1;
 }
+
+

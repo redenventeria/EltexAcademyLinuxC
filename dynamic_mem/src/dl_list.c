@@ -132,35 +132,3 @@ int int_eq(int *a, int *b)
 {
 	return *a == *b;
 }
-
-
-
-#include<stdio.h>
-int main()
-{
-	int a = 12;
-	dl_list l; new_list(&l);
-	
-	int b = 15;
-	int c = 111;
-	int d = 98;
-	
-	add_tail(&l, &b, sizeof(int));
-	add_tail(&l, &c, sizeof(int));
-	add_tail(&l, &d, sizeof(int));
-	dl_list_node **buf = malloc(sizeof(dl_list_node*) * 10);
-	find_all_nodes(buf, 10, &l, &c, (comp)int_eq);
-	
-	size_t i = 0;
-	while(buf[i] != NULL)
-		i++;
-	printf("%d\n", *(int*)(buf[0]->elem));
-	delete_node(&l, buf[0]);
-
-	find_all_nodes(buf, 10, &l, &b, (comp)int_eq);
-	
-	printf("%d\n", *(int*)(buf[0]->elem));
-	
-	free(buf);
-	free_list(&l);	
-}
