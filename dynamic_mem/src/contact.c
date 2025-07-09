@@ -13,8 +13,12 @@ void  new_contact(contact *buf, const char *name, const char *second_name, const
 
 void str_contact(char *buf, contact *c)
 {
+	int err = sprintf(buf, "name:%s sec_name:%s tel:%s\n", c->name, c->second_name, c->tel);
   
-	sprintf(buf, "name:%s sec_name:%s tel:%s\n", c->name, c->second_name, c->tel);
+  if(err == EOF) {
+    perror("Unable to write in string!\n");
+    exit(-1);
+  }
 }
 
 int is_name(const char *buf)

@@ -22,7 +22,12 @@ const char confirm_failure[] = "Такой опции нет, попробуйт
 
 void pretty_fgets(char *restrict buf, size_t n, FILE *restrict stream)
 {
-		fgets(buf, n, stream);
+		char *err = fgets(buf, n, stream);
+
+    if(err == NULL) {
+      perror("Failed to read string!\n");
+      exit(-1);
+    }
 
 		if(buf[strlen(buf) - 1] != '\n')
 			while(getchar() != '\n') {}
