@@ -62,5 +62,7 @@ int main()
     }
 
   } while(cmd[0] != '5');
-
+  
+  free(cmd);
+  free(nums);
 }
