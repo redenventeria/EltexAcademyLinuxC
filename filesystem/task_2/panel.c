@@ -1,17 +1,7 @@
-#include<stdio.h>
-#include<dirent.h>
-#include<malloc.h>
-#include<string.h>
-#include<ncurses.h>
-#include<errno.h>
+#include"panel.h"
 
-typedef struct {
-  WINDOW *win;
-  char *loc;
-  struct dirent **content;
-  int content_n;
-  int entry_i;
-} mc_panel;
+const int INACTIVE_COLOR = 1;
+const int ACTIVE_COLOR = 2;
 
 void newmc_pan(
     mc_panel **pan,
@@ -31,6 +21,9 @@ void newmc_pan(
   (*pan)->entry_i = 0;
 
   (*pan)->content_n = scandir((*pan)->loc, &(*pan)->content, NULL, alphasort);
+
+  init_pair(INACTIVE_COLOR, COLOR_WHITE, COLOR_BLACK);
+  init_pair(ACTIVE_COLOR, COLOR_BLACK, COLOR_WHITE);
 }
 
 void freemc_pan(mc_panel **pan)
@@ -46,17 +39,27 @@ void freemc_pan(mc_panel **pan)
 }
 
 void display_dir(mc_panel *pan) {
+
+  wmove(pan->win, 0, 0);
+  wattron(pan->win, COLOR_PAIR(INACTIVE_COLOR));  
   for(size_t i = 0; i < pan->content_n; i++)
     wprintw(pan->win, "%s\n", pan->content[i]->d_name);
+  wattroff(pan->win, COLOR_PAIR(INACTIVE_COLOR));  
 
+  wmove(pan->win, 4, 0);
+  wattron(pan->win, COLOR_PAIR(ACTIVE_COLOR));
+  wprintw(pan->win, "%s\n", pan->content[4]->d_name);
+  wattroff(pan->win, COLOR_PAIR(ACTIVE_COLOR));
 }
+
 int main()
 {
   initscr();
+  start_color();
   mc_panel *pan;
-  newmc_pan(&pan, ".", 50, 50, 0, 0);
-  wmove(pan->win, 0, 0);
- // for(int i = 0; i < 20*20; i++)
+  newmc_pan(&pan, ".", 49, 50, 0, 0);
+  wmove(pan->win, -1, 0);
+ // for(int i = -1; i < 20*20; i++)
  //   wprintw(pan->win, "A");
   display_dir(pan);
   wgetch(pan->win);
