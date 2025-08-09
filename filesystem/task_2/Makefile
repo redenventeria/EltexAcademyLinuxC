@@ -1,7 +1,7 @@
 BIN := main
-OBJ := main.o screen.o
-SRC := main.c screen.c
-HDR := screen.h
+OBJ := panel.o interface.o
+SRC := panel.c interface.c
+HDR := panel.h
 
 CC := gcc
 CFLAGS := -g -Wall -Wextra

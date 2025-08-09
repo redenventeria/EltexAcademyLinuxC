@@ -48,9 +48,9 @@ int main()
                 break;
             case 'e':
                 move_to_dir(panels[active_pan]);
+                wclear(panels[active_pan]->win);
                 break;
         }
-        clear();
         for(size_t i = 0; i < PAN_N; i++)
             display_dir(*panels[i]);
         refresh();

@@ -66,6 +66,9 @@ void display_dir(mc_panel pan) {
 void move_to_dir(mc_panel *pan)
 {
     struct dirent **content = pan->content;
+    if(pan->content[pan->entry_i]->d_type != DT_DIR)
+      return;
+    
     strncat(pan->loc, "/", MAX_PATH_SIZE);
     strncat(pan->loc, content[pan->entry_i]->d_name, MAX_PATH_SIZE);
 

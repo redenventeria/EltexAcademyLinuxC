@@ -12,7 +12,7 @@ typedef struct {
   WINDOW *win;
   char *loc;
   struct dirent **content;
-  int content_n;
+  size_t content_n;
   size_t entry_i;
 } mc_panel;
 
