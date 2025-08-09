@@ -26,5 +26,7 @@ void newmc_pan(
 
 void freemc_pan(mc_panel **pan);
 
-void display_dir(mc_panel *pan);
+void display_dir(mc_panel pan);
+
+void move_to_dir(mc_panel *pan);
 
