@@ -13,6 +13,7 @@ int main()
 {
     char *command = calloc(BUF, sizeof(char));
     char *running;
+    char *og_running;
     char **call = malloc(sizeof(char*)*BUF);
     int a = 1;
     while(strcmp(command, "exit"))
@@ -29,6 +30,7 @@ int main()
 
 
         running = strdup(command);
+        og_running = running; // Saving pointer to free memory
 
         int n = 0;
         char *token = strsep(&running, " ");
@@ -45,7 +47,7 @@ int main()
         int err = 0;
         pid_t a = fork();
         if(a == 0 && strcmp(command, "exit")) {
-            int err = execv(call[0], call);
+            err = execv(call[0], call);
             if(err == -1)
             {
                 printf("Error! unable to execute command!\n");
@@ -58,7 +60,7 @@ int main()
             waitpid(a, &stat, 0);
         }
 
-        free(running);
+        free(og_running);
 
         //n = 0;
         //while(call[n] != NULL) {
