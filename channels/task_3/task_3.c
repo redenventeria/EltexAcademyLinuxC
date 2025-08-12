@@ -23,52 +23,58 @@ void exec_pipe(char **call)
         call[pipe_loc] = NULL;
         int fd[2];
 
+        if(pipe(fd)) {
+            perror("Unable to create pipe");
+            exit(EXIT_FAILURE);
+        }
+
         pid_t p1 = fork();
         if(p1 == 0)
         {
             close(fd[0]);
             dup2(fd[1], STDOUT_FILENO);
+            close(fd[1]);
             int err = execvp(call[0], call);
             if(err == -1) {
                 perror("Error! unable to execute command 1!\n");
                 exit(EXIT_FAILURE);
             }
-            exit(0);
         }
         else if (p1 == -1) {
-            perror("Unable to execute child!");
+            perror("Unable to fork");
+            exit(EXIT_FAILURE);
         }
         else {
-            printf("Waiting...\n");
             int stat;
             waitpid(p1, &stat, 0);
         }
 
-        char eof = EOF;
-        write(fd[1], &eof, 1);
+        // char eof = EOF;
+        // write(fd[1], &eof, 1);
+
 
         pid_t p2 = fork();
         if(p2 == 0)
         {
             close(fd[1]);
             dup2(fd[0], STDIN_FILENO);
+            close(fd[0]);
             int err = execv(call[pipe_loc + 1], call + pipe_loc + 1);
             if(err == -1) {
                 perror("Error! unable to execute command 2!\n");
                 exit(EXIT_FAILURE);
             }
-            exit(0);
         }
         else if (p2 == -1) {
             perror("Unable to execute child 2!");
         }
         else {
+            
+            close(fd[0]);
+            close(fd[1]);
             int stat;
             waitpid(p2, &stat, 0);
         }
-
-        close(fd[0]);
-        close(fd[1]);
 
     }
     else {
@@ -86,8 +92,6 @@ void exec_pipe(char **call)
             waitpid(a, &stat, 0);
         }
     }
-
-    // /bin/ls | /bin/grep task
 
 }
 
