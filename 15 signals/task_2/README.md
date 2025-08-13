@@ -1,0 +1,1 @@
+После `make` для демонстрации работы запустите receiver_blocking, затем запустите sender <pid>, где <pid> - число, которое вывел receiver_blocking.
