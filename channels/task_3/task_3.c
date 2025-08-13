@@ -69,7 +69,6 @@ void exec_pipe(char **call)
             perror("Unable to execute child 2!");
         }
         else {
-            
             close(fd[0]);
             close(fd[1]);
             int stat;
