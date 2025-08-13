@@ -7,7 +7,7 @@ int is_done = 0;
 
 void handler(int signum)
 {
-    printf("Signal SIGUSR1 recieved, its number is %d\n", signum);
+    printf("Signal SIGUSR1 recieved\n");
     is_done = 1;
 }
 
