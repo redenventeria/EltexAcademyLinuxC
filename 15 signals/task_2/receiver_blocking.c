@@ -7,7 +7,7 @@ int is_done = 0;
 
 void handler(int signum)
 {
-    printf("Signal SIGUSR1 recieved, its number is %d\n", signum);
+    printf("Signal SIGINT recieved, its number is %d\n", signum);
     is_done = 1;
 }
 
@@ -15,15 +15,15 @@ int main()
 {
     sigset_t set;
     sigemptyset(&set);
-    sigaddset(&set, SIGUSR1);
+    sigaddset(&set, SIGINT);
     sigprocmask(SIG_BLOCK, &set, NULL);
-    printf("Blocked SIGUSR1\n");
+    printf("Blocked SIGINT\n");
 
     printf("Process pid is %d\n", getpid());
 
     struct sigaction act = {handler, 0, 0};
-    sigaction(SIGUSR1, &act, NULL);
-    printf("Registered handler for SIGUSR1\n");
+    sigaction(SIGINT, &act, NULL);
+    printf("Registered handler for SIGINT\n");
 
     while(!is_done) {}
 
