@@ -1,1 +1,1 @@
-После `make` для демонстрации работы запустите receiver_blocking, затем запустите sender <pid>, где <pid> - число, которое вывел receiver_blocking.  Или запустите команду `kill -s SIGINT <pid>`
+После `make` для демонстрации работы запустите `./receiver_blocking`, затем запустите `./sender <pid>`, где `<pid>` - число, которое вывел receiver_blocking.  Или запустите команду `kill -s SIGUSR1 <pid>`
