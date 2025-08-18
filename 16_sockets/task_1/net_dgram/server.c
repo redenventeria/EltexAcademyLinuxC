@@ -11,11 +11,6 @@ int main()
     int sock;
     struct sockaddr_in server;
 
-    if (access("socket", F_OK) == 0) {
-        unlink("socket");
-        printf("Socket removed\n");
-    }
-
     sock = socket(AF_INET, SOCK_DGRAM, 0);
     if(sock == -1) {
         perror("Unable to open socket");
@@ -91,6 +86,10 @@ int main()
         unlink("socket");
         printf("Socket removed\n");
     }
+
+    free(client);
+
+    return EXIT_SUCCESS;
     
 
 }

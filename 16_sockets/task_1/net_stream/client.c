@@ -11,7 +11,7 @@
 int main()
 {
     int sock;
-    struct sockaddr_in server, client;
+    struct sockaddr_in server;
 
     sock = socket(AF_INET, SOCK_STREAM, 0);
     if(sock == -1) {

@@ -74,6 +74,8 @@ int main()
         unlink("socket");
         printf("Socket removed\n");
     }
+
+    free(client);
     
 
 }
