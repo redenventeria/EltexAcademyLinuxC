@@ -23,7 +23,7 @@ int main()
 
     while(1) {
         char msg[] = "HELLO FROM SERVER!!!";
-        sendto(sock, msg, sizeof(msg), 0, (struct sockaddr*)&addr, sizeof(addr));
+        sendto(sock, msg, sizeof(msg) - 1, 0, (struct sockaddr*)&addr, sizeof(addr));
         sleep(1);
     }
 
