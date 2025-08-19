@@ -12,8 +12,6 @@
 
 int main()
 {
-    struct sockaddr_in sniffer;
-
     int sock = socket(AF_INET, SOCK_RAW, IPPROTO_UDP);
     if(sock == -1) {
         perror("socket");
@@ -29,14 +27,14 @@ int main()
         length = ntohs(length);
 
         char beg[64 + 1];
-        strncpy(beg, msg + DGRAM_DATA_OFFSET, 64);
+        memcpy(beg, msg + DGRAM_DATA_OFFSET, 64);
         beg[64] = '\0';
 
         printf("Received %u bytes\n", (unsigned int)length);
 
         printf("First 64 bytes of data: ");
         for(size_t i = 0; i < 64; i++) {
-            printf("%c", msg[i + DGRAM_DATA_OFFSET]);
+            printf("%c", beg[i]);
         }
         printf("\n");
     }
