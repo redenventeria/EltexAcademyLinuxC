@@ -36,20 +36,33 @@ int main()
         exit(EXIT_FAILURE);
     }
 
+    struct sockaddr client;
+    socklen_t cli_size = sizeof(client);
     char request[256];
     if(recvfrom(
         sock,
         &request,
         sizeof(request),
         0,
-        NULL,
-        0
+        &client,
+        &cli_size
     ) == -1) {
         perror("Unable to recv message!");
     }
     else {
         printf("Received %s from client.\n", request);
     }
+
+    uppercaseify(request);
+    if(sendto(
+        sock,
+        request,
+        sizeof(request),
+        0,
+        &client,
+        cli_size
+    ) == -1)
+        perror("sendto");
 
     shutdown(sock, SHUT_RDWR);
     close(sock);
