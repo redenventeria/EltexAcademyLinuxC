@@ -20,7 +20,7 @@
 
 typedef struct {
     long mtype;
-    char buf[16];
+    char buf[64];
 } msgbuf;
 
 int main_mq;
