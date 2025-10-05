@@ -227,7 +227,8 @@ int main()
         else if(!strcmp(command, "status_driver")) {
             if(arg_count != 2)
                 printf("status_driver requires one additional argument!\n");
-            status_driver(arg1);
+            else
+                status_driver(arg1);
         }
         else if(!strcmp(command, "get_drivers")) {
             if(arg_count != 1)
